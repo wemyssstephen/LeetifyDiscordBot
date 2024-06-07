@@ -1,7 +1,5 @@
-import requests
 import time
 from selenium import webdriver
-from bs4 import BeautifulSoup
 from PIL import Image
 
 
@@ -38,7 +36,5 @@ def get_profile_page(name: str):
     cropped = img.crop(area)
     cropped.save(f'{path}/croppedscreenshot.png')
 
-response = requests.get(hz_website)
-soup = BeautifulSoup(response.text, 'lxml')
 
 
