@@ -15,6 +15,8 @@ def get_profile_page(name: str):
     driver = webdriver.Firefox()
     driver.maximize_window()
 
+    # Returns the correct Leetify profile page from name.
+    # TODO: Find a way to return any profile from a search term.
     if name == "Steve":
         driver.get(hz_website)
     elif name == "Jamie":
@@ -23,12 +25,18 @@ def get_profile_page(name: str):
         driver.get(pb_website)
     elif name == "Jordan":
         driver.get(dl_website)
+
+    # Wait for the profile to load in browser.
     time.sleep(2)
 
+    # Take a screenshot.
     driver.save_full_page_screenshot(f"{path}/screenshot.png")
     print(f"Saved screenshot at {path}/screenshot.png")
+
+    # Quit selenium webdriver.
     driver.quit()
 
+    # Crop the image to include only the profile header and save.
     img = Image.open(f"{path}/screenshot.png")
     width, height = img.size
     print(f"Width: {width}, Height: {height}")
