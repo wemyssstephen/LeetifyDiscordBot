@@ -1,5 +1,5 @@
-from leetify_data_scrape import *
-
+from itertools import chain
+import pandas as pd
 
 def create_stats_table(stats):
     """Creates the stats table."""

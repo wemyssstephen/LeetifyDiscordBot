@@ -1,9 +1,6 @@
 import time
-from itertools import chain
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from PIL import Image
 
 
 hz_website = "https://leetify.com/app/profile/76561197978714095"
@@ -42,15 +39,3 @@ def get_profile_page(name: str):
     # Returns stats and match_history
     return stats, match_history
 
-
-def save_and_crop_screenshot(path: str, driver: webdriver.Firefox):
-    # Take a screenshot.
-    driver.save_full_page_screenshot(f"{path}/screenshot.png")
-    print(f"Saved screenshot at {path}/screenshot.png")
-    # Crop the image to include only the profile header and save.
-    img = Image.open(f"{path}/screenshot.png")
-    width, height = img.size
-    print(f"Width: {width}, Height: {height}")
-    area = (750, 400, 2050, 1100)
-    cropped = img.crop(area)
-    cropped.save(f'{path}/croppedscreenshot.png')
