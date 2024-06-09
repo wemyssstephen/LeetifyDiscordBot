@@ -54,6 +54,3 @@ def save_and_crop_screenshot(path: str, driver: webdriver.Firefox):
     area = (750, 400, 2050, 1100)
     cropped = img.crop(area)
     cropped.save(f'{path}/croppedscreenshot.png')
-
-
-get_profile_page("Steve")

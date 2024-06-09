@@ -1,6 +1,7 @@
 import discord
 import os
 from leetify_data_scrape import *
+from create_tables import *
 
 token = os.environ.get('LEETIFY_BOT_TOKEN')
 client = discord.Client(intents=discord.Intents.all())
@@ -24,19 +25,31 @@ async def on_message(message):
         print("Received a message!")
         if "HorzaBora" in message.content:
             print("Trying to find HorzaBora")
-            get_profile_page("Steve")
-            await message.channel.send(file=discord.File(f"{path}/croppedscreenshot.png"))
+            stats, match_history = get_profile_page("Steve")
+            print("HorzaBora found!")
+            stats_table = create_stats_table(stats)
+            match_history_table = create_stats_table(match_history)
+            await message.channel.send("```" + stats_table + "```")
         if "Dougle" in message.content:
             print("Trying to find Dougle")
-            get_profile_page("Jamie")
-            await message.channel.send(file=discord.File(f"{path}/croppedscreenshot.png"))
+            stats, match_history = get_profile_page("Jamie")
+            print("Dougle found!")
+            stats_table = create_stats_table(stats)
+            match_history_table = create_stats_table(match_history)
+            await message.channel.send("```" + stats_table + "```")
         if "Delelith" in message.content:
             print("Trying to find Delelith")
-            get_profile_page("Jordan")
-            await message.channel.send(file=discord.File(f"{path}/croppedscreenshot.png"))
+            stats, match_history = get_profile_page("Jordan")
+            print("Delelith found!")
+            stats_table = create_stats_table(stats)
+            match_history_table = create_stats_table(match_history)
+            await message.channel.send("```" + stats_table + "```")
         if "Pariah" in message.content:
             print("Trying to find Pariah")
-            get_profile_page("Ed")
-            await message.channel.send(file=discord.File(f"{path}/croppedscreenshot.png"))
+            stats, match_history = get_profile_page("Ed")
+            print("Pariah found!")
+            stats_table = create_stats_table(stats)
+            match_history_table = create_stats_table(match_history)
+            await message.channel.send("```" + stats_table + "```")
 
 client.run(token)

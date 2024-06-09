@@ -1,5 +1,6 @@
 from leetify_data_scrape import *
 
+
 def create_stats_table(stats):
     """Creates the stats table."""
     # Removes unneeded data and creates sublists of each data point.
@@ -15,6 +16,7 @@ def create_stats_table(stats):
     stats_table = pd.DataFrame(stats_lst, columns=["Overview", "Score"])
     stats_table["Score"] = pd.to_numeric(stats_table["Score"], errors="coerce")
     return stats_table.to_markdown(index=False)
+
 
 def create_match_history_table(match_history):
     """Creates the match history table."""
