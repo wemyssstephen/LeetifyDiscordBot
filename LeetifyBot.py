@@ -7,6 +7,18 @@ token = os.environ.get('LEETIFY_BOT_TOKEN')
 client = discord.Client(intents=discord.Intents.all())
 
 
+async def _send_table(name, stats, match_history, messageContent, message):
+    """Sends the stats table to discord."""
+    stats_table = create_stats_table(stats)
+    if "match" in messageContent:
+        match_history_table = create_match_history_table(match_history)
+        await message.channel.send(f"### {name}'s last 15 matches:")
+        await message.channel.send("```" + match_history_table + "```")
+    else:
+        await message.channel.send(f"### {name}'s Stats")
+        await message.channel.send("```" + stats_table + "```")
+
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -14,42 +26,44 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    messageContent = message.content.lower()
     if message.author == client.user:
         return
 
-    if message.content.startswith('!hello'):
-        print("Received a message!")
+    if messageContent.startswith('!hello'):
+        print("Received a greeting!")
         await message.channel.send('Hello!')
 
-    if message.content.startswith('!leetify'):
-        print("Received a message!")
-        if "HorzaBora" in message.content:
+    if messageContent.startswith('!leetify'):
+        print("Received a leetify request!")
+
+        if "horzabora" in messageContent:
             print("Trying to find HorzaBora")
             stats, match_history = get_profile_page("Steve")
             print("HorzaBora found!")
-            stats_table = create_stats_table(stats)
-            match_history_table = create_stats_table(match_history)
-            await message.channel.send("```" + stats_table + "```")
-        if "Dougle" in message.content:
+            await _send_table("HorzaBora", stats, match_history, messageContent, message)
+            print("Sent table!")
+
+        if "dougle" in messageContent:
             print("Trying to find Dougle")
             stats, match_history = get_profile_page("Jamie")
             print("Dougle found!")
-            stats_table = create_stats_table(stats)
-            match_history_table = create_stats_table(match_history)
-            await message.channel.send("```" + stats_table + "```")
-        if "Delelith" in message.content:
+            await _send_table("Dougle", stats, match_history, messageContent, message)
+            print("Sent table!")
+
+        if "delelith" in messageContent:
             print("Trying to find Delelith")
             stats, match_history = get_profile_page("Jordan")
             print("Delelith found!")
-            stats_table = create_stats_table(stats)
-            match_history_table = create_stats_table(match_history)
-            await message.channel.send("```" + stats_table + "```")
-        if "Pariah" in message.content:
-            print("Trying to find Pariah")
+            await _send_table("Delelith", stats, match_history, messageContent, message)
+            print("Sent table!")
+
+        if "pariah" in messageContent:
+            print("Trying to find PariahtyBit")
             stats, match_history = get_profile_page("Ed")
-            print("Pariah found!")
-            stats_table = create_stats_table(stats)
-            match_history_table = create_stats_table(match_history)
-            await message.channel.send("```" + stats_table + "```")
+            print("PariahtyBit found!")
+            await _send_table("PariahtyBit", stats, match_history, messageContent, message)
+            print("Sent table!")
+
 
 client.run(token)

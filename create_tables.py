@@ -27,7 +27,6 @@ def create_match_history_table(match_history):
     for i in match_history_headers:
         if i in ["Match History", "Rank", "Source"]:
             match_history_headers.remove(i)
-    print(match_history_headers)
 
     # Chops the list into sublist for each match.
     for i in range(0, len(match_history), 3):
@@ -41,4 +40,5 @@ def create_match_history_table(match_history):
 
     # Creates data frame with headers then returns in markdown.
     match_history_table = pd.DataFrame(history_lst, columns=match_history_headers)
-    return match_history_table.to_markdown(index=False)
+    shortened_table = match_history_table.truncate(after=15)
+    return shortened_table.to_markdown(index=False)
