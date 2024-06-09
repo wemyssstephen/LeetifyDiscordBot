@@ -1,6 +1,6 @@
 import time
+from itertools import chain
 import pandas as pd
-from tabulate import tabulate
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from PIL import Image
@@ -49,13 +49,28 @@ def get_profile_page(name: str):
         elif stats[i] in ["SOLO", "2-4 STACK", "5 STACK"]:
             del stats[i:i+2]
 
-    print(stats_lst)
-
     stats_table = pd.DataFrame(stats_lst, columns=["Overview", "Score"])
+    stats_table["Score"] = pd.to_numeric(stats_table["Score"], errors="coerce")
     print(stats_table.to_markdown(index=False))
-    # print(tabulate(stats_table, headers=["Overview", "Score"], tablefmt="pipe", showindex=False))
 
-    match_history_table = pd.DataFrame(match_history)
+    history_lst = []
+    match_history_headers = [match_history.pop(0) for i in range(0, 10)]
+    for i in match_history_headers:
+        if i in ["Match History", "Rank", "Source"]:
+            match_history_headers.remove(i)
+
+    print(match_history_headers)
+    for i in range(0, len(match_history), 3):
+        history_lst.append(match_history[i:i+3])
+    for i in range(0, len(history_lst)):
+        history_lst[i][1] = history_lst[i][1].split(" ", 1)
+        history_lst[i][2] = history_lst[i][2].split(" ")
+        history_lst[i] = list(chain(history_lst[i], history_lst[i][1], history_lst[i][2]))
+        del history_lst[i][1:3]
+    print(history_lst)
+
+    match_history_table = pd.DataFrame(history_lst, columns=match_history_headers)
+    print(match_history_table.to_markdown(index=False))
 
 
 def save_and_crop_screenshot(path: str, driver: webdriver.Firefox):
