@@ -1,5 +1,8 @@
 import time
+import pandas as pd
+from tabulate import tabulate
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from PIL import Image
 
 
@@ -29,13 +32,36 @@ def get_profile_page(name: str):
     # Wait for the profile to load in browser.
     time.sleep(2)
 
-    # Take a screenshot.
-    driver.save_full_page_screenshot(f"{path}/screenshot.png")
-    print(f"Saved screenshot at {path}/screenshot.png")
+    # Grab the data.
+    stats = driver.find_element(By.ID, "stats-overview").text.split("\n")
+    match_history = driver.find_element(By.ID, "match-history").text.split("\n")
 
     # Quit selenium webdriver.
     driver.quit()
 
+    # Manipulate data into list of lists.
+    del stats[1:3]
+    stats_lst = []
+    for i in range(0, len(stats)-5):
+        if stats[i] in ["AIM", "UTILITY", "POSITIONING", "OPENING DUELS", "CLUTCHING",
+                        "WIN RATE", "LEETIFY RATING", "T RATING", "CT RATING"]:
+            stats_lst.append(stats[i:i+2])
+        elif stats[i] in ["SOLO", "2-4 STACK", "5 STACK"]:
+            del stats[i:i+2]
+
+    print(stats_lst)
+
+    stats_table = pd.DataFrame(stats_lst, columns=["Overview", "Score"])
+    print(stats_table.to_markdown(index=False))
+    # print(tabulate(stats_table, headers=["Overview", "Score"], tablefmt="pipe", showindex=False))
+
+    match_history_table = pd.DataFrame(match_history)
+
+
+def save_and_crop_screenshot(path: str, driver: webdriver.Firefox):
+    # Take a screenshot.
+    driver.save_full_page_screenshot(f"{path}/screenshot.png")
+    print(f"Saved screenshot at {path}/screenshot.png")
     # Crop the image to include only the profile header and save.
     img = Image.open(f"{path}/screenshot.png")
     width, height = img.size
@@ -45,4 +71,4 @@ def get_profile_page(name: str):
     cropped.save(f'{path}/croppedscreenshot.png')
 
 
-
+get_profile_page("Steve")
