@@ -1,9 +1,10 @@
 from itertools import chain
 import pandas as pd
 
+
 def create_stats_table(stats):
     """Creates the stats table."""
-    # Removes unneeded data and creates sublists of each data point.
+    # Removes unneeded data and creates sub-lists of each data point.
     del stats[1:3]
     stats_lst = []
     for i in range(0, len(stats)-5):
@@ -14,6 +15,7 @@ def create_stats_table(stats):
             del stats[i:i+2]
     # Creates dataframe and returns in markdown.
     stats_table = pd.DataFrame(stats_lst, columns=["Overview", "Score"])
+    stats_table["Overview"] = stats_table["Overview"].str.title()
     stats_table["Score"] = pd.to_numeric(stats_table["Score"], errors="coerce")
     return stats_table.to_markdown(index=False)
 
@@ -32,7 +34,7 @@ def create_match_history_table(match_history):
     for i in range(0, len(match_history), 3):
         history_lst.append(match_history[i:i + 3])
     # Splits match sublist to obtain correct stats and then merges back together.
-    for i in range(0, len(history_lst)):
+    for i in range(0, len(history_lst)):    # TODO: This is rubbish.
         history_lst[i][1] = history_lst[i][1].split(" ", 1)
         history_lst[i][2] = history_lst[i][2].split(" ")
         history_lst[i] = list(chain(history_lst[i], history_lst[i][1], history_lst[i][2]))
